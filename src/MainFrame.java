@@ -1,17 +1,22 @@
 import javax.swing.*;
-import java.awt.*;
 
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame {
 
+    int Width, Height;
     MenuPanel mp;
     AppPanel ap;
 
     public MainFrame()
     {
-        mp = new MenuPanel();
-        ap = new AppPanel();
+        this.setResizable(false);
 
-        this.setSize(1600, 900);
+        this.Width = 1600;
+        this.Height = 900;
+
+        mp = new MenuPanel(this.Width, this.Height, this);
+        ap = new AppPanel(this.Width, this.Height, this);
+
+        this.setSize(this.Width, this.Height);
         this.setVisible(true);
         this.setTitle("ToolKit");
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE );
@@ -27,4 +32,13 @@ public class MainFrame extends JFrame{
         MainFrame m = new MainFrame();
     }
 
+    public void setPanel(int ch)
+    {
+        ap.setPanel(ch);
+    }
+
+    public int getPanel()
+    {
+        return this.ap.getPanel();
+    }
 }
