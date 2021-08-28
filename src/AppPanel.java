@@ -1,32 +1,42 @@
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class AppPanel extends JPanel{
 
+    SpringLayout spL;
     int Width, Height;
-    MenuButton mb1, mb2;
     MainFrame MF_OBJ;
     int ch;
 
     AppPanel(int width, int height, MainFrame obj)
     {
+        spL = new SpringLayout();
         this.MF_OBJ = obj;
-        this.Width = width;
-        this.Height = height;
-        this.setPreferredSize(new Dimension(3 * this.Width/ 4, this.Height));
-        this.mb1 = new MenuButton("HELLO 1 AP",this.getPreferredSize());
-        this.mb2 = new MenuButton("HELLO 2 AP",this.getPreferredSize());
-        this.setBackground(Color.GREEN);
+        this.setPreferredSize(new Dimension(3 * width/ 4, height));
+        this.Width = this.getWidth();
+        this.Height = this.getHeight();
+        this.setBackground(Color.DARK_GRAY);
+        this.setLayout(spL);
+    }
 
-        this.add(mb1);
-        this.add(mb2);
+    public void updateX(JPanel p)
+    {
+        this.removeAll();
+        if(p!=null) {
+            this.add(p);
+            this.spL.putConstraint(SpringLayout.NORTH, p, 10, SpringLayout.NORTH, this);
+            this.spL.putConstraint(SpringLayout.WEST, p, 10, SpringLayout.WEST, this);
+        }
+        this.updateUI();
     }
 
     public void setPanel(int ch)
     {
         this.ch = ch;
+        if(ch==1)
+            this.updateX(new CalculatorPanel(new Dimension(1180, 880)));
+        if(ch==2)
+            this.updateX(null);
     }
 
     public int getPanel()

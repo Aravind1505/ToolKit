@@ -11,7 +11,7 @@ public class MainFrame extends JFrame {
         this.setResizable(false);
 
         this.Width = 1600;
-        this.Height = 900;
+        this.Height = 937;
 
         mp = new MenuPanel(this.Width, this.Height, this);
         ap = new AppPanel(this.Width, this.Height, this);
