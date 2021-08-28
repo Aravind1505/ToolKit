@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Calculator-App:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Calculator_App_jar</output-path>
+    <root id="archive" name="Calculator-App.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$USER_HOME$/Desktop/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="Calculator-App" />
+    </root>
+  </artifact>
+</component>
