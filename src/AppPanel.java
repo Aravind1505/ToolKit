@@ -36,6 +36,8 @@ public class AppPanel extends JPanel{
         if(ch==1)
             this.updateX(new CalculatorPanel(new Dimension(1180, 880)));
         if(ch==2)
+            this.updateX(new NotepadPanel(new Dimension(1180, 880)));
+        if(ch==3)
             this.updateX(null);
     }
 
