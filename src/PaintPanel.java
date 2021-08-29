@@ -17,7 +17,7 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
         this.addMouseMotionListener(this);
         this.setPreferredSize(d);
         this.setLayout(null);
-        this.setBackground(new Color(243, 241, 245));
+        this.setBackground(new Color(255, 255, 255));
     }
 
     public void paintComponent(Graphics g)
