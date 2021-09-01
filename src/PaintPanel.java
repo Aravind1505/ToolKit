@@ -35,7 +35,6 @@ public class PaintPanel extends JPanel implements MouseListener, MouseMotionList
                     g2d.drawLine((int)this.aldp.get(i).getPoint().getX(), (int)this.aldp.get(i).getPoint().getY(), (int)this.aldp.get(i+1).getPoint().getX(), (int)this.aldp.get(i+1).getPoint().getY());
             }
         }
-
     }
 
     @Override

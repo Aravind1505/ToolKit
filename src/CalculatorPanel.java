@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class CalculatorPanel extends JPanel {
+public class CalculatorPanel extends JPanel{
 
     SpringLayout spL, spLl, spLu;
+    JPanel u, l;
+    int deg = 0;
 
     CalculatorPanel(Dimension d)
     {
@@ -20,8 +24,8 @@ public class CalculatorPanel extends JPanel {
 
     public void init()
     {
-        JPanel u = this.upper();
-        JPanel l = this.lower();
+        this.u = this.upper();
+        this.l = this.lower();
 
         this.add(u);
         this.add(l);
@@ -43,6 +47,8 @@ public class CalculatorPanel extends JPanel {
         spLu.putConstraint(SpringLayout.WEST, Ota, 10, SpringLayout.WEST, p);
         spLu.putConstraint(SpringLayout.NORTH, Ota, 10, SpringLayout.NORTH, p);
         Ota.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+        Ota.setLineWrap(true);
+        Ota.setName("Output");
         p.add(Ota);
 
         return p;
@@ -51,6 +57,7 @@ public class CalculatorPanel extends JPanel {
     public JPanel lower()
     {
         JPanel p = new JPanel();
+        CalculatorMListener cml = new CalculatorMListener(p);
         p.setLayout(spLl);
         p.setPreferredSize(new Dimension(1160,650));
         p.setBackground(new Color(107, 122, 161));
@@ -61,6 +68,8 @@ public class CalculatorPanel extends JPanel {
         for(int i=0;i<9;i++)
         {
             NLCB.add(new CalculatorButton(Integer.toString(i), new Dimension(50,50)));
+            NLCB.get(i).addMouseListener(cml);
+            NLCB.get(i).setName(i+"");
             p.add(NLCB.get(i));
             spLl.putConstraint(SpringLayout.WEST, NLCB.get(i), 25 + (i%3) * 75, SpringLayout.WEST, p);
             spLl.putConstraint(SpringLayout.NORTH, NLCB.get(i), 400 + (i/3) * 75, SpringLayout.NORTH, p );
@@ -73,10 +82,10 @@ public class CalculatorPanel extends JPanel {
         OLCB.add(new CalculatorButton("/", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("%", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("^", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("^y", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("^y", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("√", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("∑", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("∏", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("∑", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("∏", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("(", new Dimension(50,50)));
         OLCB.add(new CalculatorButton(")", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("[", new Dimension(50,50)));
@@ -87,19 +96,24 @@ public class CalculatorPanel extends JPanel {
         OLCB.add(new CalculatorButton("π", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("log", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("ln", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("x!", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("=", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("x!", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("=", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("rad", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("deg", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("sin", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("cos", new Dimension(50,50)));
         OLCB.add(new CalculatorButton("tan", new Dimension(50,50)));
-        OLCB.add(new CalculatorButton("inv", new Dimension(50,50)));
+//        OLCB.add(new CalculatorButton("Inv", new Dimension(50,50)));
+        OLCB.add(new CalculatorButton("Clear", new Dimension(350,50), 1));
+        OLCB.add(new CalculatorButton("Evaluate", new Dimension(350,50), 1));
+
 
         for(int i=0; i< OLCB.size();i++)
         {
+            OLCB.get(i).setName(OLCB.get(i).getText());
+            OLCB.get(i).addMouseListener(cml);
             p.add(OLCB.get(i));
-            spLl.putConstraint(SpringLayout.WEST, OLCB.get(i), 325 + 75 * (i % 11), SpringLayout.WEST, p);
+            spLl.putConstraint(SpringLayout.WEST, OLCB.get(i), (OLCB.get(i).getText().equals("Evaluate")) ?  625 + 75 * (i % 11): 325 + 75 * (i % 11), SpringLayout.WEST, p);
             spLl.putConstraint(SpringLayout.NORTH, OLCB.get(i), 400 + (i/11) * 75, SpringLayout.NORTH, p );
         }
 
@@ -109,7 +123,7 @@ public class CalculatorPanel extends JPanel {
         eq.setFont(new Font("TimesRoman", Font.BOLD, 15));
         spLl.putConstraint(SpringLayout.NORTH, eq, 10, SpringLayout.NORTH, p);
         spLl.putConstraint(SpringLayout.WEST, eq, 10, SpringLayout.WEST, p);
-        JTextArea eqta = new JTextArea("Enter equation here or use the button panel displayed below. Note, for custom functions like pow or sin use buttons given below to insert.", 8, 76);
+        JTextArea eqta = new JTextArea("", 8, 76);
         eqta.setLineWrap(true);
         eqta.setFont(new Font("TimesRoman", Font.PLAIN, 15));
         p.add(eqta);
@@ -128,6 +142,87 @@ public class CalculatorPanel extends JPanel {
         p.add(valta);
         spLl.putConstraint(SpringLayout.NORTH, valta, 10, SpringLayout.SOUTH, val);
         spLl.putConstraint(SpringLayout.WEST, valta, 10, SpringLayout.WEST, p);
+
+        cml.setEq(eqta);
+        cml.setU(this.u);
+
         return p;
+    }
+}
+
+class CalculatorMListener implements MouseListener{
+
+    JPanel P, U;
+    JTextArea eqta;
+    String str;
+
+    CalculatorMListener(JPanel p)
+    {
+        this.P = p;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        if(mouseEvent.getComponent().getName().equals("Clear"))
+            this.eqta.setText("");
+        else if(mouseEvent.getComponent().getName().equals("Evaluate"))
+            this.str = new Calculator_Eval(this.eqta.getText()).Evaluate();
+        else if(mouseEvent.getComponent().getName().charAt(0) >= 48 && mouseEvent.getComponent().getName().charAt(0) <= 57)
+            this.eqta.setText(this.eqta.getText() + mouseEvent.getComponent().getName());
+        else if(mouseEvent.getComponent().getName().equals("sin") ||
+                mouseEvent.getComponent().getName().equals("cos") ||
+                mouseEvent.getComponent().getName().equals("tan") ||
+                mouseEvent.getComponent().getName().equals("log") ||
+                mouseEvent.getComponent().getName().equals("ln"))
+            this.eqta.setText(this.eqta.getText() + " " + mouseEvent.getComponent().getName() + " ( ");
+        else if(mouseEvent.getComponent().getName().equals("e"))
+            this.eqta.setText(this.eqta.getText() + " " + Math.E);
+        else if(mouseEvent.getComponent().getName().equals("π"))
+            this.eqta.setText(this.eqta.getText() + " " + Math.PI);
+        else if(mouseEvent.getComponent().getName().equals("[") ||
+                mouseEvent.getComponent().getName().equals("{")  )
+            this.eqta.setText(this.eqta.getText() + " ( " );
+        else if(mouseEvent.getComponent().getName().equals("]") ||
+                mouseEvent.getComponent().getName().equals("}")  )
+            this.eqta.setText(this.eqta.getText() + " ) " );
+        else
+            this.eqta.setText(this.eqta.getText() + " " + mouseEvent.getComponent().getName() + " ");
+
+        for (Component x: this.U.getComponents()) {
+            if(x.getName().equals("Output")){
+                JTextArea jta = (JTextArea) x;
+                jta.setText("Output : " + this.str);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
+    }
+
+    public void setEq(JTextArea eqta)
+    {
+        this.eqta = eqta;
+    }
+
+    public void setU(JPanel u)
+    {
+        this.U = u;
     }
 }
